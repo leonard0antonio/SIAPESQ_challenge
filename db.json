@@ -1,0 +1,203 @@
+{
+  "species": [
+    {
+      "name": "Nicolas",
+      "category": "Mamíferos",
+      "description": "muito feio",
+      "imageUrl": "https://labovet.com.br/wp-content/uploads/2022/08/porco_thinkstock.jpg",
+      "quantity": 5,
+      "city": "Camaragibe",
+      "state": "Pernambuco",
+      "latitude": -8.0213832,
+      "longitude": -34.9810768,
+      "id": "VN07yiSbrPA"
+    },
+    {
+      "name": "Léo",
+      "category": "Mamíferos",
+      "description": "muito feio",
+      "imageUrl": "https://labovet.com.br/wp-content/uploads/2022/08/porco_thinkstock.jpg",
+      "quantity": 5,
+      "city": "Camaragibe",
+      "state": "Pernambuco",
+      "latitude": -8.0213832,
+      "longitude": -34.9810768,
+      "id": "VN07yiSbrPA"
+    },
+    {
+      "name": "emman8uel",
+      "category": "Mamíferos",
+      "description": "muito feio",
+      "imageUrl": "https://labovet.com.br/wp-content/uploads/2022/08/porco_thinkstock.jpg",
+      "quantity": 5,
+      "city": "Camaragibe",
+      "state": "Pernambuco",
+      "latitude": -8.0213832,
+      "longitude": -35.9810768,
+      "id": "VN07yiSbrPA"
+    },
+    {
+      "name": "emman8uel",
+      "category": "Mamíferos",
+      "description": "muito feio",
+      "imageUrl": "https://labovet.com.br/wp-content/uploads/2022/08/porco_thinkstock.jpg",
+      "quantity": 5,
+      "city": "Camaragibe",
+      "state": "Pernambuco",
+      "latitude": -8.0213832,
+      "longitude": -35.9810768,
+      "id": "VN07yiSbrPA"
+    },
+    {
+      "name": "emman8uel",
+      "category": "Mamíferos",
+      "description": "muito feio",
+      "imageUrl": "https://labovet.com.br/wp-content/uploads/2022/08/porco_thinkstock.jpg",
+      "quantity": 5,
+      "city": "Camaragibe",
+      "state": "Pernambuco",
+      "latitude": -8.0213832,
+      "longitude": -35.9810768,
+      "id": "VN07yiSbrPA"
+    },
+    {
+      "name": "emman8uel",
+      "category": "Mamíferos",
+      "description": "muito feio",
+      "imageUrl": "https://labovet.com.br/wp-content/uploads/2022/08/porco_thinkstock.jpg",
+      "quantity": 5,
+      "city": "Camaragibe",
+      "state": "Pernambuco",
+      "latitude": -8.0213832,
+      "longitude": -35.9810768,
+      "id": "VN07yiSbrPA"
+    },
+    {
+      "name": "emman8uel",
+      "category": "Mamíferos",
+      "description": "muito feio",
+      "imageUrl": "https://labovet.com.br/wp-content/uploads/2022/08/porco_thinkstock.jpg",
+      "quantity": 5,
+      "city": "Camaragibe",
+      "state": "Pernambuco",
+      "latitude": -8.0213832,
+      "longitude": -35.9810768,
+      "id": "VN07yiSbrPA"
+    },
+    {
+      "name": "emman8uel",
+      "category": "Mamíferos",
+      "description": "muito feio",
+      "imageUrl": "https://labovet.com.br/wp-content/uploads/2022/08/porco_thinkstock.jpg",
+      "quantity": 5,
+      "city": "Camaragibe",
+      "state": "Pernambuco",
+      "latitude": -8.0213832,
+      "longitude": -35.9810768,
+      "id": "VN07yiSbrPA"
+    },
+    {
+      "name": "emman8uel",
+      "category": "Mamíferos",
+      "description": "muito feio",
+      "imageUrl": "https://labovet.com.br/wp-content/uploads/2022/08/porco_thinkstock.jpg",
+      "quantity": 5,
+      "city": "Camaragibe",
+      "state": "Pernambuco",
+      "latitude": -8.0213832,
+      "longitude": -35.9810768,
+      "id": "VN07yiSbrPA"
+    },
+    {
+      "name": "fsdfs",
+      "category": "Aves",
+      "description": "sdf",
+      "imageUrl": "",
+      "quantity": 3,
+      "city": "sdf",
+      "state": "sdf",
+      "latitude": 52.5403132,
+      "longitude": 14.1736265,
+      "id": "kRe6QJc5eOQ"
+    },
+    {
+      "name": "fdgdf",
+      "category": "Aves",
+      "description": "sddfg",
+      "imageUrl": "",
+      "quantity": 1,
+      "city": "dgfg",
+      "state": "gfgfds",
+      "id": "zrKKfVG9rr0"
+    },
+    {
+      "name": "leo",
+      "category": "Aves",
+      "description": "",
+      "imageUrl": "",
+      "quantity": 1,
+      "city": "recife",
+      "state": "",
+      "id": "1XcULAY96Iw"
+    },
+    {
+      "name": "miguel",
+      "category": "Anfíbios",
+      "description": "",
+      "imageUrl": "",
+      "quantity": 1,
+      "city": "Limoeiro",
+      "state": "Pernambuco",
+      "latitude": -7.872599,
+      "longitude": -35.440154,
+      "id": "R58PCmKPpkM"
+    },
+    {
+      "name": "lula",
+      "category": "Répteis",
+      "description": "",
+      "imageUrl": "",
+      "quantity": 1,
+      "city": "Boa Viagem",
+      "state": "PE",
+      "latitude": -8.1235027,
+      "longitude": -34.9033955,
+      "id": "GjhgZgWZ1cA"
+    },
+    {
+      "name": "asd",
+      "category": "Aves",
+      "description": "",
+      "imageUrl": "",
+      "quantity": 1,
+      "city": "limo",
+      "state": "",
+      "id": "kjXexT0EG-g"
+    },
+    {
+      "name": "limo",
+      "category": "Aves",
+      "description": "",
+      "imageUrl": "",
+      "quantity": 7,
+      "city": "Brasília",
+      "state": "DF",
+      "latitude": -15.7939869,
+      "longitude": -47.8828,
+      "id": "qiELcJW-OwE"
+    },
+    {
+      "name": "tigre",
+      "category": "Aves",
+      "description": "",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Tiger_in_Ranthambhore.jpg",
+      "quantity": 5,
+      "city": "Abreu e Lima",
+      "state": "PE",
+      "latitude": -7.900719,
+      "longitude": -34.898389,
+      "id": "oPpnCjR3pXM"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
