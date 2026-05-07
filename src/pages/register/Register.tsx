@@ -168,7 +168,7 @@ export function Register() {
         {isEditMode ? "Editar Registo" : "Novo Registo de Espécie"}
       </h2>
 
-      <form onSubmit={(e) => handleSubmit(e, false)} className="flex flex-col gap-5" autoComplete="off" >
+      <div className="flex flex-col gap-5">
         <RegisterAlerts
           error={error}
           success={success}
@@ -214,8 +214,9 @@ export function Register() {
           isLoading={isLoading}
           success={success}
           isEditMode={isEditMode}
+          onClick={(e) => handleSubmit(e, false)}
         />
-      </form>
+      </div>
     </div>
   );
 }

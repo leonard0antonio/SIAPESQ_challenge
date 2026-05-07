@@ -4,12 +4,14 @@ interface Props {
   isLoading: boolean;
   success: boolean;
   isEditMode: boolean;
+  onClick: (e: React.MouseEvent) => void; // <-- Nova propriedade
 }
 
-export function SubmitButton({ isLoading, success, isEditMode }: Props) {
+export function SubmitButton({ isLoading, success, isEditMode, onClick }: Props) {
   return (
     <button
-      type="submit"
+      type="button" // <-- Mudamos de "submit" para "button"
+      onClick={onClick} // <-- Adicionamos o evento de clique
       disabled={isLoading || success}
       className={`mt-6 py-4 rounded-xl font-bold text-lg transition-all flex justify-center items-center gap-2 overflow-hidden relative group ${
         success
@@ -27,7 +29,6 @@ export function SubmitButton({ isLoading, success, isEditMode }: Props) {
           : "Registar Espécie"}
       </span>
       
-      {/* Ícone que aparece no hover se não estiver a carregar nem for sucesso */}
       {!isLoading && !success && (
         <svg className="w-5 h-5 relative z-10 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

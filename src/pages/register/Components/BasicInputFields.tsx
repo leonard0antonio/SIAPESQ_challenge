@@ -56,8 +56,9 @@ export function BasicInputFields({
             Quantidade *
           </label>
           <input
-            type="number"
-            min="1"
+            type="text"             /* <-- Mudamos de "number" para "text" */
+            inputMode="numeric"     /* <-- Força o teclado numérico no telemóvel */
+            pattern="[0-9]*"
             className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
             value={quantity}
             onChange={(e) =>
