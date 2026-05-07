@@ -3,8 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../services/api";
 
 // Importação dos componentes extraídos
-import { RegisterAlerts } from "./Components/RegisterAlerts";
-import { LocationAutocomplete } from "./Components/LocationAutocomplete";
+import { RegisterAlerts } from "../../pages/register/Components/RegisterAlerts";
+import { LocationAutocomplete } from "../../pages/register/Components/LocationAutocomplete";
+import { BasicInputFields } from "../../pages/register/Components/BasicInputFields";
+import { DescriptionInput } from "../../pages/register/Components/DescriptionInput";
+import { SubmitButton } from "../../pages/register/Components/SubmitButton";
 
 interface IBGELocation {
   city: string;
@@ -27,9 +30,7 @@ export function Register() {
 
   // Estados de Localização (IBGE)
   const [allLocations, setAllLocations] = useState<IBGELocation[]>([]);
-  const [filteredLocations, setFilteredLocations] = useState<IBGELocation[]>(
-    [],
-  );
+  const [filteredLocations, setFilteredLocations] = useState<IBGELocation[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   // Estados de Controlo Visual
@@ -41,8 +42,7 @@ export function Register() {
   // Carrega dados se for Edição
   useEffect(() => {
     if (isEditMode) {
-      api
-        .get(`/species/${id}`)
+      api.get(`/species/${id}`)
         .then((response) => {
           const animal = response.data;
           setName(animal.name);
@@ -53,9 +53,7 @@ export function Register() {
           setCity(animal.city || "");
           setState(animal.state || "");
         })
-        .catch(() => {
-          setError("Erro ao carregar os dados para edição.");
-        });
+        .catch(() => setError("Erro ao carregar os dados para edição."));
     }
   }, [id, isEditMode]);
 
@@ -79,17 +77,10 @@ export function Register() {
     setLocationNotFound(false);
 
     if (val.length > 1) {
-      const textToSearch = val
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
+      const textToSearch = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
       const filtered = allLocations
         .filter((l) =>
-          l.city
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase()
-            .includes(textToSearch),
+          l.city.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(textToSearch)
         )
         .slice(0, 6);
 
@@ -118,9 +109,7 @@ export function Register() {
     }
 
     if ((city && !state) || (!city && state)) {
-      setError(
-        "Para localizar no mapa, preencha tanto a Cidade quanto o Estado.",
-      );
+      setError("Para localizar no mapa, preencha tanto a Cidade quanto o Estado.");
       return;
     }
 
@@ -132,9 +121,7 @@ export function Register() {
 
       if (city && state && !bypassMap) {
         const query = encodeURIComponent(`${city}, ${state}`);
-        const mapRes = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=json&q=${query}`,
-        );
+        const mapRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
         const mapData = await mapRes.json();
 
         if (mapData && mapData.length > 0) {
@@ -169,9 +156,7 @@ export function Register() {
       setIsLoading(false);
       setTimeout(() => navigate("/"), 2500);
     } catch (err) {
-      setError(
-        "Erro ao salvar. Verifique a sua conexão ou o servidor (json-server).",
-      );
+      setError("Erro ao salvar. Verifique a sua conexão ou o servidor (json-server).");
       setIsLoading(false);
     }
   };
@@ -183,11 +168,7 @@ export function Register() {
         {isEditMode ? "Editar Registo" : "Novo Registo de Espécie"}
       </h2>
 
-      <form
-        onSubmit={(e) => handleSubmit(e, false)}
-        className="flex flex-col gap-5"
-      >
-        {/* COMPONENTE DE ALERTAS EXTRAÍDO */}
+      <form onSubmit={(e) => handleSubmit(e, false)} className="flex flex-col gap-5">
         <RegisterAlerts
           error={error}
           success={success}
@@ -199,71 +180,18 @@ export function Register() {
           onRetryMap={() => setLocationNotFound(false)}
         />
 
-        {/* INPUTS BÁSICOS */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nome da Espécie *
-            </label>
-            <input
-              placeholder="Ex: Onça Pintada"
-              className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              disabled={success}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Categoria *
-            </label>
-            <select
-              className="w-full p-3 border border-gray-300 rounded-xl bg-white focus:ring-2 focus:ring-green-500 outline-none"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              disabled={success}
-            >
-              <option value="">Selecione...</option>
-              <option value="Aves">Aves</option>
-              <option value="Mamíferos">Mamíferos</option>
-              <option value="Répteis">Répteis</option>
-              <option value="Anfíbios">Anfíbios</option>
-            </select>
-          </div>
-        </div>
+        <BasicInputFields
+          name={name}
+          setName={setName}
+          category={category}
+          setCategory={setCategory}
+          quantity={quantity}
+          setQuantity={setQuantity}
+          imageUrl={imageUrl}
+          setImageUrl={setImageUrl}
+          disabled={success}
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Quantidade *
-            </label>
-            <input
-              type="number"
-              min="1"
-              className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
-              value={quantity}
-              onChange={(e) =>
-                setQuantity(e.target.value === "" ? "" : Number(e.target.value))
-              }
-              disabled={success}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Link da Imagem
-            </label>
-            <input
-              type="url"
-              placeholder="https://site.com/foto.jpg"
-              className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              disabled={success}
-            />
-          </div>
-        </div>
-
-        {/* COMPONENTE DE LOCALIZAÇÃO EXTRAÍDO */}
         <LocationAutocomplete
           city={city}
           state={state}
@@ -276,37 +204,17 @@ export function Register() {
           onBlurCity={() => setTimeout(() => setShowSuggestions(false), 200)}
         />
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Descrição (Opcional)
-          </label>
-          <textarea
-            placeholder="Observações..."
-            className="w-full p-3 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-green-500"
-            rows={3}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            disabled={success}
-          />
-        </div>
+        <DescriptionInput
+          description={description}
+          setDescription={setDescription}
+          disabled={success}
+        />
 
-        <button
-          type="submit"
-          disabled={isLoading || success}
-          className={`mt-4 py-4 rounded-xl font-bold text-lg shadow-lg transition-all ${
-            success
-              ? "bg-green-500 text-white"
-              : "bg-green-600 hover:bg-green-700 text-white"
-          } ${isLoading ? "opacity-50 cursor-wait" : ""}`}
-        >
-          {isLoading
-            ? "A processar..."
-            : success
-              ? "Finalizado!"
-              : isEditMode
-                ? "Confirmar Edição"
-                : "Confirmar Cadastro"}
-        </button>
+        <SubmitButton
+          isLoading={isLoading}
+          success={success}
+          isEditMode={isEditMode}
+        />
       </form>
     </div>
   );
