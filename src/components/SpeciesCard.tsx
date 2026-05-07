@@ -1,13 +1,33 @@
+import { Link } from 'react-router-dom';
 import type { Species } from '../types/species';
 
 interface Props {
   data: Species;
+  onDelete: (id: string) => void; // Nova função recebida da Home para apagar
 }
 
-export function SpeciesCard({ data }: Props) {
+export function SpeciesCard({ data, onDelete }: Props) {
   return (
-    <div className="flex flex-col bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100">
+    <div className="flex flex-col bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 relative group">
       
+      {/* Botões de Ação (Aparecem no topo) */}
+      <div className="absolute top-3 right-3 flex gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <Link 
+          to={`/edit/${data.id}`} 
+          className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full shadow-md transition-colors"
+          title="Editar Registo"
+        >
+          ✏️
+        </Link>
+        <button 
+          onClick={() => onDelete(data.id)}
+          className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-md transition-colors"
+          title="Excluir Registo"
+        >
+          🗑️
+        </button>
+      </div>
+
       {/* === ÁREA DA IMAGEM === */}
       {data.imageUrl ? (
         <div className="h-48 w-full overflow-hidden relative bg-gray-100">
@@ -15,7 +35,6 @@ export function SpeciesCard({ data }: Props) {
             src={data.imageUrl} 
             alt={`Foto de ${data.name}`} 
             className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-            // Proteção: se o link quebrar no futuro, ele avisa em vez de ficar um erro feio
             onError={(e) => {
               e.currentTarget.style.display = 'none';
               if (e.currentTarget.parentElement) {
@@ -24,13 +43,11 @@ export function SpeciesCard({ data }: Props) {
               }
             }}
           />
-          {/* Badge de Quantidade sobre a imagem */}
           <div className="absolute top-3 left-3 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
             Qtd: {data.quantity || 1}
           </div>
         </div>
       ) : (
-        /* Caso o registo não tenha imagem */
         <div className="h-48 bg-gray-200 w-full flex items-center justify-center relative">
           <span className="text-gray-400 font-medium">Sem Imagem</span>
           <div className="absolute top-3 left-3 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
@@ -41,8 +58,6 @@ export function SpeciesCard({ data }: Props) {
       
       {/* === CONTEÚDO DO CARTÃO === */}
       <div className="p-5 flex flex-col flex-1">
-        
-        {/* Cabeçalho do Cartão: Nome e Categoria */}
         <div className="flex justify-between items-start mb-2 gap-2">
           <h3 className="text-xl font-bold text-gray-800 line-clamp-1 capitalize">{data.name}</h3>
           <span className="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded whitespace-nowrap">
@@ -50,7 +65,6 @@ export function SpeciesCard({ data }: Props) {
           </span>
         </div>
 
-        {/* Localização (Cidade e Estado) */}
         {(data.city || data.state) && (
           <div className="flex items-center gap-1 text-gray-500 text-xs mb-3 font-medium">
             <span className="text-sm">📍</span>
@@ -58,12 +72,10 @@ export function SpeciesCard({ data }: Props) {
           </div>
         )}
 
-        {/* Descrição */}
         <p className="text-gray-600 text-sm line-clamp-3 mb-4">
-          {data.description || 'Nenhuma descrição fornecida para esta espécie.'}
+          {data.description || 'Nenhuma descrição fornecida.'}
         </p>
         
-        {/* Rodapé do Cartão: Status do Mapa */}
         <div className="mt-auto pt-4 border-t border-gray-50 flex justify-end items-center text-xs">
           {data.latitude && data.longitude ? (
             <span className="text-green-600 font-bold flex items-center gap-1">
