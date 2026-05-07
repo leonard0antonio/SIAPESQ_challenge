@@ -24,6 +24,21 @@ export function Home() {
     fetchSpecies();
   }, []);
 
+  // === NOVA FUNÇÃO DE EXCLUIR ===
+  const handleDelete = async (id: string) => {
+    // Pede confirmação antes de apagar
+    const confirmDelete = window.confirm("Tem a certeza que deseja excluir este registo permanentemente?");
+    
+    if (confirmDelete) {
+      try {
+        await api.delete(`/species/${id}`); // Apaga na API
+        setSpecies(species.filter(item => item.id !== id)); // Remove da tela imediatamente
+      } catch (error) {
+        alert("Erro ao excluir. Tente novamente.");
+      }
+    }
+  };
+
   // FILTRO BLINDADO (Ignora acentos, maiúsculas e espaços acidentais)
   const filteredSpecies = useMemo(() => {
     if (!Array.isArray(species)) return [];
@@ -95,7 +110,7 @@ export function Home() {
                 whileHover={{ scale: 1.03 }}
                 className="w-full"
               >
-                <SpeciesCard data={item} />
+                <SpeciesCard data={item} onDelete={handleDelete} />
               </motion.div>
             ))
           ) : (

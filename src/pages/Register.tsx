@@ -1,5 +1,5 @@
 import { useState, useEffect, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom"; // <-- useParams adicionado
 import { api } from "../services/api";
 
 interface IBGELocation {
@@ -9,6 +9,8 @@ interface IBGELocation {
 
 export function Register() {
   const navigate = useNavigate();
+  const { id } = useParams(); // <-- Pega o ID da URL se existir
+  const isEditMode = !!id; // Descobre se estamos a criar ou a editar
 
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
@@ -16,7 +18,7 @@ export function Register() {
   const [imageUrl, setImageUrl] = useState("");
   const [quantity, setQuantity] = useState<number | "">(1);
   const [city, setCity] = useState("");
-  const [state, setState] = useState(""); // <-- AGORA O ESTADO PODE SER EDITADO
+  const [state, setState] = useState(""); 
 
   // ESTADOS DE LOCALIZAÇÃO (IBGE)
   const [allLocations, setAllLocations] = useState<IBGELocation[]>([]);
@@ -27,7 +29,25 @@ export function Register() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [locationNotFound, setLocationNotFound] = useState(false); // Para quando o mapa não acha
+  const [locationNotFound, setLocationNotFound] = useState(false); 
+
+  // === NOVO: Carregar dados se for modo de edição ===
+  useEffect(() => {
+    if (isEditMode) {
+      api.get(`/species/${id}`).then(response => {
+        const animal = response.data;
+        setName(animal.name);
+        setCategory(animal.category);
+        setDescription(animal.description || "");
+        setImageUrl(animal.imageUrl || "");
+        setQuantity(animal.quantity || 1);
+        setCity(animal.city || "");
+        setState(animal.state || "");
+      }).catch(() => {
+        setError("Erro ao carregar os dados para edição.");
+      });
+    }
+  }, [id, isEditMode]);
 
   // Busca inicial das cidades
   useEffect(() => {
@@ -46,7 +66,7 @@ export function Register() {
   const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setCity(val);
-    setLocationNotFound(false); // Esconde o aviso de mapa não encontrado se ele começar a digitar novamente
+    setLocationNotFound(false); 
 
     if (val.length > 1) {
       const textToSearch = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -63,7 +83,7 @@ export function Register() {
 
   const handleSelectLocation = (loc: IBGELocation) => {
     setCity(loc.city);
-    setState(loc.state); // Auto-preenche o estado, mas ele ainda pode apagar depois se quiser
+    setState(loc.state); 
     setShowSuggestions(false);
     setError(""); 
   };
@@ -79,7 +99,7 @@ export function Register() {
       return;
     }
 
-    // 2. Validação Lógica de Localização (Se tem um, deve ter o outro)
+    // 2. Validação Lógica de Localização
     if ((city && !state) || (!city && state)) {
       setError("Para localizar no mapa, preencha tanto a Cidade quanto o Estado.");
       return;
@@ -91,7 +111,7 @@ export function Register() {
       let finalLat: number | undefined = undefined;
       let finalLng: number | undefined = undefined;
 
-      // 3. Tenta localizar no mapa (Seja texto do IBGE ou texto manual)
+      // 3. Tenta localizar no mapa
       if (city && state && !bypassMap) {
         const query = encodeURIComponent(`${city}, ${state}`);
         const mapRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
@@ -101,33 +121,35 @@ export function Register() {
           finalLat = Number(mapData[0].lat);
           finalLng = Number(mapData[0].lon);
         } else {
-          // MAPA NÃO ACHOU! Para tudo e pergunta se quer salvar mesmo assim.
           setLocationNotFound(true);
           setIsLoading(false);
           return;
         }
       }
 
-      // 4. Salva na API
-      await api.post("/species", {
+      const payload = {
         name: name.trim(),
         category,
         description: description.trim(),
         imageUrl: imageUrl.trim(),
         quantity: Number(quantity),
         city: city.trim(),
-        state: state.trim().toUpperCase(), // Transforma "sp" em "SP" por segurança
+        state: state.trim().toUpperCase(),
         latitude: finalLat,
         longitude: finalLng,
-      });
+      };
+
+      // 4. Salva na API (Atualiza se for edição, Cria se for novo)
+      if (isEditMode) {
+        await api.put(`/species/${id}`, payload);
+      } else {
+        await api.post("/species", payload);
+      }
 
       // 5. Sucesso e Redirecionamento
       setSuccess(true);
       setIsLoading(false);
       
-      setName(""); setCategory(""); setDescription(""); setImageUrl("");
-      setQuantity(1); setCity(""); setState(""); setLocationNotFound(false);
-
       setTimeout(() => {
         navigate("/");
       }, 2500);
@@ -142,28 +164,28 @@ export function Register() {
     <div className="max-w-xl mx-auto p-8 bg-white rounded-2xl shadow-xl mt-10 mb-20 border border-gray-100 relative">
       <h2 className="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2">
         <span className="bg-green-600 w-2 h-8 rounded-full"></span>
-        Novo Registo de Espécie
+        {/* Título dinâmico */}
+        {isEditMode ? "Editar Registo" : "Novo Registo de Espécie"}
       </h2>
 
       <form onSubmit={(e) => handleSubmit(e, false)} className="flex flex-col gap-5">
         
-        {/* MENSAGEM DE ERRO */}
         {error && (
           <div className="p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-lg font-medium text-sm animate-bounce">
             ⚠️ {error}
           </div>
         )}
 
-        {/* MENSAGEM DE SUCESSO (Verde - Gigante) */}
         {success && (
           <div className="fixed inset-x-0 top-24 mx-auto max-w-md p-6 bg-green-600 text-white rounded-2xl shadow-2xl z-[60] text-center animate-in fade-in zoom-in duration-300">
             <span className="text-4xl mb-2 block">✅</span>
-            <h3 className="text-xl font-bold">Cadastro Concluído!</h3>
-            <p className="text-sm opacity-90">A espécie foi adicionada. A redirecionar...</p>
+            <h3 className="text-xl font-bold">{isEditMode ? "Edição Concluída!" : "Cadastro Concluído!"}</h3>
+            <p className="text-sm opacity-90">
+              {isEditMode ? "A espécie foi atualizada com sucesso. A redirecionar..." : "A espécie foi adicionada. A redirecionar..."}
+            </p>
           </div>
         )}
 
-        {/* AVISO: MAPA NÃO ENCONTROU O QUE ELE DIGITOU */}
         {locationNotFound && (
           <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 shadow-sm animate-pulse">
             <p className="font-bold text-sm flex items-center gap-1">📍 Local não encontrado no mapa</p>
@@ -173,7 +195,7 @@ export function Register() {
             <div className="flex gap-2">
               <button
                 type="button"
-                onClick={(e) => handleSubmit(e, true)} // Chama a função com bypassMap = true
+                onClick={(e) => handleSubmit(e, true)} 
                 className="bg-amber-600 text-white text-xs font-bold px-4 py-2 rounded hover:bg-amber-700 transition-colors"
               >
                 Sim, guardar sem mapa
@@ -189,7 +211,6 @@ export function Register() {
           </div>
         )}
 
-        {/* ... INPUTS NOME E CATEGORIA ... */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Nome da Espécie *</label>
@@ -218,7 +239,6 @@ export function Register() {
           </div>
         </div>
 
-        {/* ... INPUTS QUANTIDADE E IMAGEM ... */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Quantidade *</label>
@@ -244,7 +264,6 @@ export function Register() {
           </div>
         </div>
 
-        {/* SECÇÃO LOCALIZAÇÃO (AGORA LIVRE) */}
         <div className="bg-blue-50 p-5 rounded-xl border border-blue-100">
           <p className="text-xs font-bold text-blue-600 uppercase mb-3">Localização (IBGE ou Manual)</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -279,7 +298,6 @@ export function Register() {
               )}
             </div>
 
-            {/* O ESTADO AGORA É EDITÁVEL NOVAMENTE! */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
               <input
@@ -296,7 +314,6 @@ export function Register() {
           </p>
         </div>
 
-        {/* ... DESCRIÇÃO ... */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Descrição (Opcional)</label>
           <textarea
@@ -316,7 +333,7 @@ export function Register() {
             success ? "bg-green-500 text-white" : "bg-green-600 hover:bg-green-700 text-white"
           } ${isLoading ? "opacity-50 cursor-wait" : ""}`}
         >
-          {isLoading ? "A localizar e salvar..." : success ? "Finalizado!" : "Confirmar Cadastro"}
+          {isLoading ? "A localizar e salvar..." : success ? "Finalizado!" : isEditMode ? "Confirmar Edição" : "Confirmar Cadastro"}
         </button>
       </form>
     </div>

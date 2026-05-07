@@ -21,6 +21,9 @@ function App() {
             
             {/* Rota de cadastro: Formulário */}
             <Route path="/register" element={<Register />} />
+            
+            {/* Rota de edição: Reutiliza o mesmo formulário, mas com dados pré-carregados */}
+            <Route path="/edit/:id" element={<Register />} />
           </Routes>
         </main>
 
