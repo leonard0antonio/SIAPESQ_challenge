@@ -1,3 +1,5 @@
+// Componente de transição de página, responsável por animar a entrada e saída dos componentes da página de destino. Ele utiliza a biblioteca Framer Motion para criar uma experiência visualmente envolvente, com animações suaves que melhoram a navegação entre as seções da página. O componente envolve os elementos filhos e aplica as animações de opacidade e movimento vertical para criar uma transição fluida entre as páginas.
+
 import { motion } from "framer-motion";
 import type {ReactNode} from "react";
 

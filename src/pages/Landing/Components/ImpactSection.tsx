@@ -1,3 +1,5 @@
+// Componente de seção "Impacto", responsável por destacar as principais métricas e resultados alcançados pelo projeto. Ele utiliza a biblioteca Framer Motion para animar a entrada dos elementos, proporcionando uma experiência visualmente envolvente. A seção apresenta estatísticas relevantes, como o número de estados mapeados, categorias monitoradas, precisão geográfica e disponibilidade, reforçando o impacto positivo do projeto na preservação da biodiversidade.
+
 import { motion } from "framer-motion";
 
 const stats = [

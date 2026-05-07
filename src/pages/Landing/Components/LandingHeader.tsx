@@ -1,3 +1,5 @@
+// Componente de cabeçalho da página de destino, responsável por exibir o logotipo do projeto e a navegação principal. Ele utiliza a biblioteca Framer Motion para animar a entrada dos elementos, criando uma experiência visualmente atraente. O cabeçalho é projetado para ser responsivo, garantindo que a navegação seja acessível em diferentes dispositivos, e inclui links que permitem aos usuários navegar suavemente para as seções "Nossa Missão" e "O Projeto" da página.
+
 import { motion } from "framer-motion";
 
 export function LandingHeader() {

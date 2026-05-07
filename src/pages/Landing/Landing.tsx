@@ -1,3 +1,5 @@
+// Página de destino do projeto, composta por várias seções que apresentam a proposta, os pilares, o impacto e um convite para acessar o catálogo de espécies. Cada seção é implementada como um componente separado, utilizando a biblioteca Framer Motion para criar animações suaves e envolventes. A estrutura da página é organizada de forma a guiar os usuários através da narrativa do projeto, destacando seus objetivos e resultados de maneira clara e visualmente atraente.
+
 import { LandingHeader } from "./Components/LandingHeader";
 import { HeroSection } from "./Components/HeroSection";
 import { PillarsSection } from "./Components/PillarsSection";

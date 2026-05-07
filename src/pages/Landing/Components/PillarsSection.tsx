@@ -1,3 +1,5 @@
+// Componente de seção "Pilares", responsável por destacar os três pilares fundamentais do projeto: Mapeamento Ativo, Análise de Dados e Ação Direcionada. Ele utiliza a biblioteca Framer Motion para animar a entrada dos elementos, proporcionando uma experiência visualmente envolvente. Cada pilar é representado por um ícone SVG personalizado, um título e uma descrição detalhada, reforçando a missão do projeto de transformar dados de observação em ferramentas práticas de conservação ambiental.
+
 import { motion } from "framer-motion";
 
 const pillars = [

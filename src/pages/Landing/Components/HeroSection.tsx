@@ -1,3 +1,5 @@
+// Componente de seção "Hero", responsável por apresentar a proposta do projeto de forma impactante e visualmente atraente. Ele utiliza a biblioteca Framer Motion para animar a entrada dos elementos, criando uma experiência envolvente para os usuários. A seção inclui um título chamativo, uma descrição concisa e um botão de call to action que direciona os usuários para o catálogo de espécies, incentivando a exploração da plataforma.
+
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 

@@ -1,3 +1,5 @@
+// Componente de seção "Call to Action", responsável por incentivar os usuários a acessarem o catálogo de espécies. Ele utiliza a biblioteca Framer Motion para animar a entrada dos elementos, criando uma experiência visualmente atraente. A seção inclui um título chamativo, uma descrição persuasiva e um botão estilizado que direciona os usuários para a plataforma, reforçando a importância da participação na comunidade de observadores de espécies.
+
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 

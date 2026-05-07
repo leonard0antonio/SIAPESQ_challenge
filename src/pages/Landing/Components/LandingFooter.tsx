@@ -1,3 +1,5 @@
+// Componente de rodapé da página de destino, responsável por exibir informações de copyright, links para os termos de uso e política de privacidade, e o logotipo do projeto. Ele utiliza a biblioteca Framer Motion para animar a entrada dos elementos, criando uma experiência visualmente atraente. O rodapé é projetado para ser responsivo e acessível, garantindo que as informações importantes estejam sempre visíveis para os usuários.
+
 import { useState } from "react";
 import { LegalModal } from "./LegalModal";
 

@@ -1,3 +1,5 @@
+// Componente de seção "Sobre", responsável por apresentar o contexto do projeto e destacar a importância da tecnologia para a preservação da biodiversidade. Ele utiliza a biblioteca Framer Motion para animar a entrada dos elementos, proporcionando uma experiência visualmente envolvente. A seção inclui um título, uma descrição detalhada e uma imagem ilustrativa com uma legenda discreta, reforçando a mensagem central do projeto.
+
 import { motion } from "framer-motion";
 
 export function AboutSection() {
