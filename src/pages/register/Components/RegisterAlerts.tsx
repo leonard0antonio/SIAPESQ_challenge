@@ -25,10 +25,16 @@ export function RegisterAlerts({
 
       {/* MENSAGEM DE SUCESSO (Verde - Flutuante) */}
       {success && (
-        <div className="fixed inset-x-0 top-24 mx-auto max-w-md p-6 bg-green-600 text-white rounded-2xl shadow-2xl z-[60] text-center animate-in fade-in zoom-in duration-300">
-          <span className="text-4xl mb-2 block">✅</span>
-          <h3 className="text-xl font-bold">{isEditMode ? "Edição Concluída!" : "Cadastro Concluído!"}</h3>
-          <p className="text-sm opacity-90">
+        <div className="fixed inset-x-0 top-24 mx-auto max-w-md p-8 bg-emerald-600 text-white rounded-3xl shadow-2xl shadow-emerald-600/40 z-[60] text-center animate-in fade-in zoom-in duration-300 border border-emerald-500">
+          <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+            <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h3 className="text-2xl font-black tracking-tight mb-2">
+            {isEditMode ? "Edição Concluída!" : "Cadastro Concluído!"}
+          </h3>
+          <p className="text-sm text-emerald-50 font-medium">
             {isEditMode ? "A espécie foi atualizada com sucesso. A redirecionar..." : "A espécie foi adicionada. A redirecionar..."}
           </p>
         </div>
