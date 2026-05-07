@@ -16,19 +16,20 @@ export function Register() {
   const [imageUrl, setImageUrl] = useState("");
   const [quantity, setQuantity] = useState<number | "">(1);
   const [city, setCity] = useState("");
-  const [state, setState] = useState("");
+  const [state, setState] = useState(""); // <-- AGORA O ESTADO PODE SER EDITADO
 
-  // ESTADOS DE LOCALIZAÇÃO
+  // ESTADOS DE LOCALIZAÇÃO (IBGE)
   const [allLocations, setAllLocations] = useState<IBGELocation[]>([]);
   const [filteredLocations, setFilteredLocations] = useState<IBGELocation[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [isLocationValid, setIsLocationValid] = useState(false); // <-- Garante que a cidade existe
 
   // ESTADOS DE CONTROLO VISUAL
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [locationNotFound, setLocationNotFound] = useState(false); // Para quando o mapa não acha
 
+  // Busca inicial das cidades
   useEffect(() => {
     fetch('https://servicodados.ibge.gov.br/api/v1/localidades/municipios')
       .then(res => res.json())
@@ -39,13 +40,13 @@ export function Register() {
         }));
         setAllLocations(formatted);
       })
-      .catch(() => setError("Erro ao carregar base de dados de cidades."));
+      .catch(() => console.error("Erro ao carregar base de dados de cidades."));
   }, []);
 
   const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setCity(val);
-    setIsLocationValid(false); // Se ele digitar, invalidamos até ele selecionar da lista
+    setLocationNotFound(false); // Esconde o aviso de mapa não encontrado se ele começar a digitar novamente
 
     if (val.length > 1) {
       const textToSearch = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -62,14 +63,13 @@ export function Register() {
 
   const handleSelectLocation = (loc: IBGELocation) => {
     setCity(loc.city);
-    setState(loc.state);
-    setIsLocationValid(true); // AGORA É VÁLIDO
+    setState(loc.state); // Auto-preenche o estado, mas ele ainda pode apagar depois se quiser
     setShowSuggestions(false);
-    setError(""); // Limpa erro de localização se houver
+    setError(""); 
   };
 
-  const handleSubmit = async (e: FormEvent, bypassMap = false) => {
-    e.preventDefault();
+  const handleSubmit = async (e: FormEvent | null, bypassMap = false) => {
+    if (e) e.preventDefault();
     setError("");
     setSuccess(false);
 
@@ -79,9 +79,9 @@ export function Register() {
       return;
     }
 
-    // 2. Verificação de Localização
+    // 2. Validação Lógica de Localização (Se tem um, deve ter o outro)
     if ((city && !state) || (!city && state)) {
-      setError("Para localizar no mapa, preencha Cidade e Estado corretamente.");
+      setError("Para localizar no mapa, preencha tanto a Cidade quanto o Estado.");
       return;
     }
 
@@ -91,7 +91,7 @@ export function Register() {
       let finalLat: number | undefined = undefined;
       let finalLng: number | undefined = undefined;
 
-      // Tenta geocodificar se houver texto de cidade/estado e não for um "ignore mapa"
+      // 3. Tenta localizar no mapa (Seja texto do IBGE ou texto manual)
       if (city && state && !bypassMap) {
         const query = encodeURIComponent(`${city}, ${state}`);
         const mapRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
@@ -101,14 +101,14 @@ export function Register() {
           finalLat = Number(mapData[0].lat);
           finalLng = Number(mapData[0].lon);
         } else {
-          // Se o Nominatim não achou nada com o que o usuário digitou
+          // MAPA NÃO ACHOU! Para tudo e pergunta se quer salvar mesmo assim.
           setLocationNotFound(true);
           setIsLoading(false);
           return;
         }
       }
 
-      // 3. ENVIO DOS DADOS
+      // 4. Salva na API
       await api.post("/species", {
         name: name.trim(),
         category,
@@ -116,16 +116,15 @@ export function Register() {
         imageUrl: imageUrl.trim(),
         quantity: Number(quantity),
         city: city.trim(),
-        state: state.trim().toUpperCase(),
+        state: state.trim().toUpperCase(), // Transforma "sp" em "SP" por segurança
         latitude: finalLat,
         longitude: finalLng,
       });
 
-      // 4. FEEDBACK E REDIRECIONAMENTO
+      // 5. Sucesso e Redirecionamento
       setSuccess(true);
       setIsLoading(false);
       
-      // Limpa tudo
       setName(""); setCategory(""); setDescription(""); setImageUrl("");
       setQuantity(1); setCity(""); setState(""); setLocationNotFound(false);
 
@@ -134,28 +133,28 @@ export function Register() {
       }, 2500);
 
     } catch (err) {
-      setError("Erro ao salvar. Verifique a sua conexão ou o servidor.");
+      setError("Erro ao salvar. Verifique a sua conexão ou o servidor (json-server).");
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto p-8 bg-white rounded-2xl shadow-xl mt-10 mb-20 border border-gray-100">
+    <div className="max-w-xl mx-auto p-8 bg-white rounded-2xl shadow-xl mt-10 mb-20 border border-gray-100 relative">
       <h2 className="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2">
         <span className="bg-green-600 w-2 h-8 rounded-full"></span>
         Novo Registo de Espécie
       </h2>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      <form onSubmit={(e) => handleSubmit(e, false)} className="flex flex-col gap-5">
         
-        {/* MENSAGEM DE ERRO (Rojo) */}
+        {/* MENSAGEM DE ERRO */}
         {error && (
           <div className="p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-lg font-medium text-sm animate-bounce">
             ⚠️ {error}
           </div>
         )}
 
-        {/* MENSAGEM DE SUCESSO (Verde) - Agora mais visível */}
+        {/* MENSAGEM DE SUCESSO (Verde - Gigante) */}
         {success && (
           <div className="fixed inset-x-0 top-24 mx-auto max-w-md p-6 bg-green-600 text-white rounded-2xl shadow-2xl z-[60] text-center animate-in fade-in zoom-in duration-300">
             <span className="text-4xl mb-2 block">✅</span>
@@ -164,6 +163,33 @@ export function Register() {
           </div>
         )}
 
+        {/* AVISO: MAPA NÃO ENCONTROU O QUE ELE DIGITOU */}
+        {locationNotFound && (
+          <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 shadow-sm animate-pulse">
+            <p className="font-bold text-sm flex items-center gap-1">📍 Local não encontrado no mapa</p>
+            <p className="text-xs mb-3 mt-1">
+              O mapa não conseguiu encontrar "{city}, {state}". Deseja guardar apenas os nomes sem a marcação no mapa geográfico?
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={(e) => handleSubmit(e, true)} // Chama a função com bypassMap = true
+                className="bg-amber-600 text-white text-xs font-bold px-4 py-2 rounded hover:bg-amber-700 transition-colors"
+              >
+                Sim, guardar sem mapa
+              </button>
+              <button
+                type="button"
+                onClick={() => setLocationNotFound(false)}
+                className="text-amber-700 text-xs px-3 py-2 underline hover:text-amber-900"
+              >
+                Tentar corrigir a cidade
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ... INPUTS NOME E CATEGORIA ... */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Nome da Espécie *</label>
@@ -192,6 +218,7 @@ export function Register() {
           </div>
         </div>
 
+        {/* ... INPUTS QUANTIDADE E IMAGEM ... */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Quantidade *</label>
@@ -217,14 +244,16 @@ export function Register() {
           </div>
         </div>
 
+        {/* SECÇÃO LOCALIZAÇÃO (AGORA LIVRE) */}
         <div className="bg-blue-50 p-5 rounded-xl border border-blue-100">
-          <p className="text-xs font-bold text-blue-600 uppercase mb-3">Localização (IBGE)</p>
+          <p className="text-xs font-bold text-blue-600 uppercase mb-3">Localização (IBGE ou Manual)</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-1">Cidade</label>
               <input
-                placeholder="Busque a cidade..."
-                className={`w-full p-3 border rounded-lg bg-white outline-none transition-all ${isLocationValid ? 'border-green-500 ring-1 ring-green-500' : 'border-gray-300'}`}
+                placeholder="Busque ou digite a cidade..."
+                className="w-full p-3 border border-gray-300 rounded-lg bg-white outline-none focus:ring-2 focus:ring-blue-400 transition-all"
                 value={city}
                 onChange={handleCityChange}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
@@ -236,31 +265,38 @@ export function Register() {
                   {filteredLocations.map((loc, idx) => (
                     <li
                       key={idx}
-                      className="px-4 py-3 hover:bg-green-50 cursor-pointer text-sm text-gray-700 flex justify-between border-b last:border-b-0"
+                      className="px-4 py-3 hover:bg-blue-50 cursor-pointer text-sm text-gray-700 flex justify-between border-b last:border-b-0"
                       onMouseDown={(e) => {
                         e.preventDefault();
                         handleSelectLocation(loc);
                       }}
                     >
                       <span className="font-bold">{loc.city}</span>
-                      <span className="text-green-600 font-bold text-xs bg-green-100 px-2 py-1 rounded">{loc.state}</span>
+                      <span className="text-blue-600 font-bold text-xs bg-blue-100 px-2 py-1 rounded">{loc.state}</span>
                     </li>
                   ))}
                 </ul>
               )}
             </div>
 
+            {/* O ESTADO AGORA É EDITÁVEL NOVAMENTE! */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
               <input
-                className="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
+                placeholder="Ex: SP"
+                className="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 outline-none"
                 value={state}
-                readOnly
+                onChange={(e) => setState(e.target.value)}
+                disabled={success}
               />
             </div>
           </div>
+          <p className="text-[11px] text-gray-500 mt-2">
+            Selecione uma cidade da lista do Brasil ou digite manualmente.
+          </p>
         </div>
 
+        {/* ... DESCRIÇÃO ... */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Descrição (Opcional)</label>
           <textarea
