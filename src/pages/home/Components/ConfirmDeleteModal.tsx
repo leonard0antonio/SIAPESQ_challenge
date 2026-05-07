@@ -1,11 +1,15 @@
+//component de confirmação de exclusão de registos, utilizado no Dashboard para confirmar a remoção de um registo específico. Ele é exibido como um modal que solicita ao usuário que confirme ou cancele a ação de exclusão, garantindo que os dados não sejam removidos acidentalmente dos gráficos e do sistema.
+
 import { motion, AnimatePresence } from "framer-motion";
 
+// Importação dos subcomponentes
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
 }
 
+// Modal de confirmação para exclusão de registos
 export function ConfirmDeleteModal({ isOpen, onClose, onConfirm }: Props) {
   return (
     <AnimatePresence>

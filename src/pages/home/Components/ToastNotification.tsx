@@ -1,3 +1,5 @@
+//componente de notificação toast, responsável por exibir mensagens de sucesso ou erro de forma temporária e visualmente atraente. Ele utiliza a biblioteca Framer Motion para animar a entrada e saída da notificação, proporcionando uma experiência suave e moderna. O ToastNotification é projetado para ser fixo na parte inferior da tela, centralizado horizontalmente, e inclui um ícone visual para reforçar a mensagem transmitida. Este componente é essencial para fornecer feedback imediato aos usuários sobre suas ações no aplicativo.
+
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Props {

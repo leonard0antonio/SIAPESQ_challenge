@@ -1,7 +1,10 @@
+//componente de grade de espécies, responsável por exibir uma coleção de cartões de espécies em um layout de grade. Ele utiliza a biblioteca Framer Motion para animar a entrada, saída e interação dos cartões, proporcionando uma experiência visualmente agradável. O SpeciesGrid também lida com o estado vazio, exibindo uma mensagem informativa quando não há espécies para mostrar. Este componente é essencial para a interface do usuário, pois organiza e apresenta as espécies registadas de forma clara e acessível.
+
 import { motion, AnimatePresence } from "framer-motion";
 import { SpeciesCard } from "../Components/SpeciesCard";
 import type { Species } from "../../../types/species";
 
+// Interface de props para o componente SpeciesGrid, definindo os tipos esperados para as propriedades de lista de espécies e função de exclusão
 interface Props {
   speciesList: Species[];
   onRequestDelete: (id: string) => void;

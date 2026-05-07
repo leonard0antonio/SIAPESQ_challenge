@@ -1,6 +1,9 @@
+//componente de cartão de espécie, responsável por exibir as informações de cada espécie registada em um formato visualmente atraente. Ele inclui a imagem da espécie (se disponível), nome, categoria, localização e descrição. O SpeciesCard também possui botões de ação para editar ou excluir o registo, que aparecem ao passar o mouse sobre o cartão. Este componente é fundamental para a interface do usuário, pois permite que os usuários visualizem e gerenciem facilmente suas espécies registadas.
+
 import { Link } from "react-router-dom";
 import type { Species } from "../../../types/species";
 
+// Interface de props para o componente SpeciesCard, definindo os tipos esperados para as propriedades de dados da espécie e a função de exclusão
 interface Props {
   data: Species;
   onDelete: (id: string) => void;
@@ -9,7 +12,7 @@ interface Props {
 export function SpeciesCard({ data, onDelete }: Props) {
   return (
     <div className="flex flex-col bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 relative group">
-      {/* BOTÕES DE AÇÃO COM ÍCONES PROFISSIONAIS (Aparecem ao passar o rato) */}
+      {/* BOTÕES DE AÇÃO COM ÍCONES (Aparecem ao passar o rato) */}
       <div className="absolute top-3 right-3 flex gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <Link
           to={`/edit/${data.id}`}

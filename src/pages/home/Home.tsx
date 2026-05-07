@@ -1,3 +1,5 @@
+// Página principal do aplicativo, responsável por exibir o catálogo de espécies, o dashboard de estatísticas e o mapa de localização. A Home é o ponto central onde os usuários podem visualizar, filtrar e gerenciar suas espécies registadas. Ela integra vários subcomponentes para fornecer uma experiência completa e interativa, incluindo a exibição de cartões de espécies, gráficos estatísticos e um mapa interativo. A Home também lida com a lógica de exclusão de espécies e exibe notificações toast para feedback do usuário.
+
 import { useState, useMemo, useEffect } from "react";
 import type { Species } from "../../types/species";
 import { api } from "../../services/api";
@@ -20,6 +22,7 @@ export function Home() {
   const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean; id: string | null }>({ isOpen: false, id: null });
   const [toastMessage, setToastMessage] = useState(""); 
 
+  // Busca as espécies do backend quando o componente é montado
   useEffect(() => {
     async function fetchSpecies() {
       try {
@@ -32,6 +35,7 @@ export function Home() {
     fetchSpecies();
   }, []);
 
+  // Filtra as espécies com base no termo de busca e categoria selecionada, utilizando useMemo para otimizar o desempenho
   const filteredSpecies = useMemo(() => {
     if (!Array.isArray(species)) return [];
     return species.filter((item) => {

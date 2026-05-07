@@ -1,9 +1,12 @@
+//componente de header, responsável por exibir a barra de navegação no topo da página. Ele inclui o logo do sistema, links para as principais seções (Catálogo e Dashboard) e um botão de cadastro. O Header é projetado para ser responsivo e manter-se fixo no topo da página, proporcionando uma navegação fácil e rápida para os usuários enquanto exploram o conteúdo do sistema.
+
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export function Header() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Função para lidar com o clique no link do Dashboard, garantindo que a navegação seja suave e intuitiva
   const handleDashboardClick = (e: React.MouseEvent) => {
     e.preventDefault();
 

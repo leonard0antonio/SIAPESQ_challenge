@@ -1,3 +1,6 @@
+//componente de barra de filtros, responsável por fornecer uma interface para os usuários filtrarem as espécies registadas com base em critérios como nome e categoria. Ele inclui um campo de busca para filtrar por nome e um menu suspenso para selecionar a categoria desejada. O FilterBar é uma parte essencial do sistema, pois permite que os usuários encontrem rapidamente as espécies específicas que estão procurando, melhorando a experiência de navegação e a eficiência na gestão dos registos.
+
+//interface de props para o componente FilterBar, definindo os tipos esperados para as propriedades de busca e filtro
 interface Props {
   searchTerm: string;
   onSearchChange: (value: string) => void;
