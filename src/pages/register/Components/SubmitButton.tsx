@@ -11,19 +11,28 @@ export function SubmitButton({ isLoading, success, isEditMode }: Props) {
     <button
       type="submit"
       disabled={isLoading || success}
-      className={`mt-4 py-4 rounded-xl font-bold text-lg shadow-lg transition-all ${
+      className={`mt-6 py-4 rounded-xl font-bold text-lg transition-all flex justify-center items-center gap-2 overflow-hidden relative group ${
         success
-          ? "bg-green-500 text-white"
-          : "bg-green-600 hover:bg-green-700 text-white"
-      } ${isLoading ? "opacity-50 cursor-wait" : ""}`}
+          ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30"
+          : "bg-gray-900 text-white shadow-xl hover:bg-emerald-700 hover:shadow-emerald-700/30"
+      } ${isLoading ? "opacity-70 cursor-wait" : ""}`}
     >
-      {isLoading
-        ? "A processar..."
-        : success
-        ? "Finalizado!"
-        : isEditMode
-        ? "Confirmar Edição"
-        : "Confirmar Cadastro"}
+      <span className="relative z-10">
+        {isLoading
+          ? "A processar..."
+          : success
+          ? "Concluído!"
+          : isEditMode
+          ? "Guardar Edição"
+          : "Registar Espécie"}
+      </span>
+      
+      {/* Ícone que aparece no hover se não estiver a carregar nem for sucesso */}
+      {!isLoading && !success && (
+        <svg className="w-5 h-5 relative z-10 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
+      )}
     </button>
   );
 }

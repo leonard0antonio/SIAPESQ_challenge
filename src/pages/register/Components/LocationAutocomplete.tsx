@@ -20,8 +20,11 @@ export function LocationAutocomplete({
   onCityChange, onStateChange, onSelectLocation, onBlurCity
 }: Props) {
   return (
-    <div className="bg-blue-50 p-5 rounded-xl border border-blue-100">
-      <p className="text-xs font-bold text-blue-600 uppercase mb-3">Localização (IBGE ou Manual)</p>
+    <div className="bg-emerald-50/50 p-6 rounded-2xl border border-emerald-100/50">
+      <div className="flex items-center gap-2 mb-4">
+        <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+        <p className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Localização (IBGE ou Manual)</p>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         
         {/* Input da Cidade com Dropdown */}
@@ -29,7 +32,7 @@ export function LocationAutocomplete({
           <label className="block text-sm font-medium text-gray-700 mb-1">Cidade</label>
           <input
             placeholder="Busque ou digite a cidade..."
-            className="w-full p-3 border border-gray-300 rounded-lg bg-white outline-none focus:ring-2 focus:ring-blue-400 transition-all"
+            className="w-full p-3 border border-gray-300 rounded-lg bg-white outline-none ffocus:ring-emerald-500/50 focus:border-emerald-500 transition-all"
             value={city}
             onChange={onCityChange}
             onBlur={onBlurCity}
@@ -61,7 +64,7 @@ export function LocationAutocomplete({
           <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
           <input
             placeholder="Ex: SP"
-            className="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 outline-none"
+            className="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-emerald-500/50 focus:border-emerald-500 outline-none"
             value={state}
             onChange={(e) => onStateChange(e.target.value)}
             disabled={disabled}
