@@ -109,41 +109,47 @@ export function SpeciesMap({ species }: Props) {
     return Object.values(groups);
   }, [mappedSpecies]);
 
+  // ... (o resto do código acima do return mantém-se igual)
   if (mappedSpecies.length === 0) return null;
 
   return (
-    <div className="mt-12 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-      <div className="flex items-center gap-2 mb-6">
-        <span className="bg-amber-500 w-2 h-8 rounded-full"></span>
-        <h2 className="text-2xl font-bold text-gray-800">Mapa de Ocorrências</h2>
+    <div className="mt-12 mb-20 bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+      
+      {/* Cabeçalho do Mapa Premium */}
+      <div className="flex items-center gap-3 mb-8">
+        <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center border border-emerald-100">
+          <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
+        </div>
+        <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Mapa de Ocorrências</h2>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
         
-        {/* LISTA LATERAL DE NAVEGAÇÃO (O Controlo Remoto do Mapa) */}
-        <div className="w-full lg:w-1/3 flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-          <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+        {/* LISTA LATERAL (Menu) */}
+        <div className="w-full lg:w-1/3 flex flex-col gap-3 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar">
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">
             Locais Registados ({uniqueLocations.length})
           </p>
           
           {uniqueLocations.map((loc) => (
             <button
               key={loc.key}
-              // Ao clicar, define o alvo e a chave para o MapController agir
               onClick={() => setMapTarget({ pos: [loc.lat, loc.lng], key: loc.key })}
-              className={`flex items-center justify-between p-3 rounded-xl border transition-all text-left group active:scale-[0.98] ${
+              className={`flex items-center justify-between p-4 rounded-2xl border transition-all text-left group active:scale-[0.98] ${
                 mapTarget?.key === loc.key 
-                  ? 'bg-green-50 border-green-300 ring-1 ring-green-200' 
-                  : 'bg-gray-50 border-gray-100 hover:bg-green-50 hover:border-green-100'
+                  ? 'bg-emerald-50 border-emerald-200 ring-2 ring-emerald-100 shadow-sm' 
+                  : 'bg-white border-gray-100 hover:bg-gray-50'
               }`}
             >
               <div>
-                <p className={`font-bold transition-colors ${mapTarget?.key === loc.key ? 'text-green-700' : 'text-gray-700 group-hover:text-green-700'}`}>
+                <p className={`font-bold transition-colors ${mapTarget?.key === loc.key ? 'text-emerald-800' : 'text-gray-700 group-hover:text-gray-900'}`}>
                   {loc.city}
                 </p>
                 <p className="text-xs text-gray-500 font-medium">{loc.state}</p>
               </div>
-              <div className={`bg-white border border-gray-200 text-xs font-bold w-8 h-8 flex items-center justify-center rounded-full shadow-sm ${mapTarget?.key === loc.key ? 'text-green-700' : 'text-gray-600'}`}>
+              <div className={`border text-xs font-bold w-8 h-8 flex items-center justify-center rounded-full transition-colors ${
+                mapTarget?.key === loc.key ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-gray-50 border-gray-200 text-gray-500'
+              }`}>
                 {loc.count}
               </div>
             </button>
@@ -151,61 +157,50 @@ export function SpeciesMap({ species }: Props) {
         </div>
 
         {/* CONTAINER DO MAPA */}
-        <div className="w-full lg:w-2/3 h-[400px] rounded-2xl overflow-hidden border border-gray-200 shadow-inner relative z-0">
-          <MapContainer 
-            center={[-14.235, -51.925]} // Centro do Brasil
-            zoom={4} 
-            scrollWheelZoom={false}
-            className="w-full h-full"
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+        <div className="w-full lg:w-2/3 h-[450px] rounded-3xl overflow-hidden border border-gray-200 shadow-inner relative z-0">
+          <MapContainer center={[-14.235, -51.925]} zoom={4} scrollWheelZoom={false} className="w-full h-full">
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             
-            {/* O "Piloto" invisível do mapa, passando o alvo e as referências */}
             <MapController target={mapTarget} markerRefs={markerRefs} />
 
-            {/* Renderiza os Pinos Agrupados */}
             {groupedMarkers.map((group) => (
               <Marker 
                 key={group.key} 
                 position={[group.lat, group.lng]}
-                // A MÁGICA: Guarda a referência deste pino no objeto markerRefs usando a chave única
-                ref={(ref) => {
-                  if (ref) {
-                    markerRefs.current[group.key] = ref;
-                  }
-                }}
+                ref={(ref) => { if (ref) markerRefs.current[group.key] = ref; }}
               >
                 <Popup className="rounded-xl custom-popup">
-                  <div className="p-1 min-w-[200px]">
-                    <h3 className="font-bold text-gray-800 border-b border-gray-200 pb-2 mb-2 flex items-center gap-1">
-                      <span>📍</span> {group.city}, {group.state}
+                  <div className="p-2 min-w-[220px]">
+                    
+                    {/* Cabeçalho do Popup sutil */}
+                    <h3 className="font-bold text-gray-900 border-b border-gray-100 pb-3 mb-3 flex items-center gap-2 text-sm">
+                      <svg className="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                      {group.city}, {group.state}
                     </h3>
                     
-                    <div className="max-h-40 overflow-y-auto flex flex-col gap-2 pr-1">
+                    {/* Lista de Animais no Popup */}
+                    <div className="max-h-48 overflow-y-auto flex flex-col gap-2 pr-1 custom-scrollbar">
                       {group.animals.map(animal => (
-                        <div key={animal.id} className="bg-gray-50 p-2 rounded-lg border border-gray-100">
-                          <div className="flex justify-between items-start mb-1">
-                            <p className="font-bold text-green-700 text-sm capitalize">{animal.name}</p>
-                            <span className="text-[10px] font-bold text-white bg-blue-500 px-1.5 py-0.5 rounded shadow-sm">
+                        <div key={animal.id} className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                          <div className="flex justify-between items-start mb-1.5">
+                            <p className="font-bold text-gray-800 text-sm capitalize">{animal.name}</p>
+                            <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
                               Qtd: {animal.quantity || 1}
                             </span>
                           </div>
-                          <span className="bg-gray-200 text-gray-600 text-[10px] px-2 py-0.5 rounded font-bold inline-block mt-1">
+                          <span className="text-gray-500 text-[10px] uppercase tracking-wider font-semibold">
                             {animal.category}
                           </span>
                         </div>
                       ))}
                     </div>
+
                   </div>
                 </Popup>
               </Marker>
             ))}
           </MapContainer>
         </div>
-
       </div>
     </div>
   );
