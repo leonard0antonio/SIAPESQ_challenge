@@ -34,6 +34,7 @@ export function LocationAutocomplete({
             onChange={onCityChange}
             onBlur={onBlurCity}
             disabled={disabled}
+            autoComplete="none"
           />
 
           {showSuggestions && filteredLocations.length > 0 && (
@@ -64,6 +65,7 @@ export function LocationAutocomplete({
             value={state}
             onChange={(e) => onStateChange(e.target.value)}
             disabled={disabled}
+            autoComplete="none"
           />
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import type { Species } from "../../types/species";
 import { api } from "../../services/api";
+import { useLocation } from "react-router-dom";
 
 // Importação dos subcomponentes
 import { Dashboard } from "../home/Components/Dashboard";
@@ -11,6 +12,7 @@ import { FilterBar } from "../home/Components/FilterBar";
 import { SpeciesGrid } from "../home/Components/SpeciesGrid";
 
 export function Home() {
+  const location = useLocation();
   const [species, setSpecies] = useState<Species[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
@@ -60,6 +62,18 @@ export function Home() {
       console.error("Erro ao excluir", error);
     }
   };
+
+    useEffect(() => {
+    if (location.hash === "#dashboard") {
+      // Um pequeno delay garante que o React termine a animação de página antes de deslizar
+      setTimeout(() => {
+        document.getElementById("dashboard")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 300);
+    } else if (location.pathname === "/catalogo") {
+      // Se não tem hash, garante que a página começa no topo
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [location]);
 
   return (
     <div className="max-w-6xl mx-auto p-6 relative">

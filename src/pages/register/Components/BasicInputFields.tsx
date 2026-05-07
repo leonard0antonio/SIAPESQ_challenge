@@ -28,6 +28,7 @@ export function BasicInputFields({
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={disabled}
+            autoComplete="off"
           />
         </div>
         <div>

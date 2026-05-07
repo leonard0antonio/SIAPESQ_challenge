@@ -47,7 +47,7 @@ export function AboutSection() {
           <div className="relative rounded-2xl overflow-hidden shadow-lg border border-gray-200/50">
             {/* Imagem elegante, sem bordas exageradas */}
             <img 
-              src="https://images.unsplash.com/photo-1550258859-d088c279c7c0?auto=format&fit=crop&q=80&w=1000" 
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-Y7nzgnDzHnNMqG4TPTQ6nGk_iOYieOhZdhzuJYlY29ypdrbRB5Ln6Zliy2F8MFko1FDJAopqXyhnHuDaj5_x90c-pryapjQMtow9OEromJoHfjNKU2S67QfW-9rIkg&s=10&ec=121657068" 
               alt="Arara Vermelha no seu habitat natural" 
               className="w-full h-[450px] object-cover"
             />

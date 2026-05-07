@@ -154,7 +154,7 @@ export function Register() {
 
       setSuccess(true);
       setIsLoading(false);
-      setTimeout(() => navigate("/"), 2500);
+      setTimeout(() => navigate("/catalogo"), 2500);
     } catch (err) {
       setError("Erro ao salvar. Verifique a sua conexão ou o servidor (json-server).");
       setIsLoading(false);
@@ -168,7 +168,7 @@ export function Register() {
         {isEditMode ? "Editar Registo" : "Novo Registo de Espécie"}
       </h2>
 
-      <form onSubmit={(e) => handleSubmit(e, false)} className="flex flex-col gap-5">
+      <form onSubmit={(e) => handleSubmit(e, false)} className="flex flex-col gap-5" autoComplete="off" >
         <RegisterAlerts
           error={error}
           success={success}
