@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import type { Species } from '../types/species';
+import type { Species } from '../../../types/species';
 
 interface Props {
   data: Species;

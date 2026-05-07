@@ -3,7 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart, Pie, Cell, Legend 
 } from 'recharts';
-import type { Species } from '../types/species';
+import type { Species } from '../../../types/species';
 
 interface Props {
   species: Species[];

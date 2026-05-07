@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { SpeciesCard } from "./SpeciesCard";
-import type { Species } from "../types/species";
+import { SpeciesCard } from "../Components/SpeciesCard";
+import type { Species } from "../../../types/species";
 
 interface Props {
   speciesList: Species[];

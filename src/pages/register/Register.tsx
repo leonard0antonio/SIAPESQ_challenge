@@ -1,10 +1,10 @@
 import { useState, useEffect, FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { api } from "../services/api";
+import { api } from "../../services/api";
 
 // Importação dos componentes extraídos
-import { RegisterAlerts } from "../components/RegisterAlerts";
-import { LocationAutocomplete } from "../components/LocationAutocomplete";
+import { RegisterAlerts } from "./Components/RegisterAlerts";
+import { LocationAutocomplete } from "./Components/LocationAutocomplete";
 
 interface IBGELocation {
   city: string;
@@ -23,45 +23,50 @@ export function Register() {
   const [imageUrl, setImageUrl] = useState("");
   const [quantity, setQuantity] = useState<number | "">(1);
   const [city, setCity] = useState("");
-  const [state, setState] = useState(""); 
+  const [state, setState] = useState("");
 
   // Estados de Localização (IBGE)
   const [allLocations, setAllLocations] = useState<IBGELocation[]>([]);
-  const [filteredLocations, setFilteredLocations] = useState<IBGELocation[]>([]);
+  const [filteredLocations, setFilteredLocations] = useState<IBGELocation[]>(
+    [],
+  );
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   // Estados de Controlo Visual
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [locationNotFound, setLocationNotFound] = useState(false); 
+  const [locationNotFound, setLocationNotFound] = useState(false);
 
   // Carrega dados se for Edição
   useEffect(() => {
     if (isEditMode) {
-      api.get(`/species/${id}`).then(response => {
-        const animal = response.data;
-        setName(animal.name);
-        setCategory(animal.category);
-        setDescription(animal.description || "");
-        setImageUrl(animal.imageUrl || "");
-        setQuantity(animal.quantity || 1);
-        setCity(animal.city || "");
-        setState(animal.state || "");
-      }).catch(() => {
-        setError("Erro ao carregar os dados para edição.");
-      });
+      api
+        .get(`/species/${id}`)
+        .then((response) => {
+          const animal = response.data;
+          setName(animal.name);
+          setCategory(animal.category);
+          setDescription(animal.description || "");
+          setImageUrl(animal.imageUrl || "");
+          setQuantity(animal.quantity || 1);
+          setCity(animal.city || "");
+          setState(animal.state || "");
+        })
+        .catch(() => {
+          setError("Erro ao carregar os dados para edição.");
+        });
     }
   }, [id, isEditMode]);
 
   // Busca inicial das cidades (IBGE)
   useEffect(() => {
-    fetch('https://servicodados.ibge.gov.br/api/v1/localidades/municipios')
-      .then(res => res.json())
-      .then(data => {
+    fetch("https://servicodados.ibge.gov.br/api/v1/localidades/municipios")
+      .then((res) => res.json())
+      .then((data) => {
         const formatted = data.map((m: any) => ({
           city: m.nome,
-          state: m.microrregiao?.mesorregiao?.UF?.sigla || 'DF'
+          state: m.microrregiao?.mesorregiao?.UF?.sigla || "DF",
         }));
         setAllLocations(formatted);
       })
@@ -71,12 +76,21 @@ export function Register() {
   const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setCity(val);
-    setLocationNotFound(false); 
+    setLocationNotFound(false);
 
     if (val.length > 1) {
-      const textToSearch = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const textToSearch = val
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
       const filtered = allLocations
-        .filter(l => l.city.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(textToSearch))
+        .filter((l) =>
+          l.city
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .includes(textToSearch),
+        )
         .slice(0, 6);
 
       setFilteredLocations(filtered);
@@ -88,9 +102,9 @@ export function Register() {
 
   const handleSelectLocation = (loc: IBGELocation) => {
     setCity(loc.city);
-    setState(loc.state); 
+    setState(loc.state);
     setShowSuggestions(false);
-    setError(""); 
+    setError("");
   };
 
   const handleSubmit = async (e: FormEvent | null, bypassMap = false) => {
@@ -104,7 +118,9 @@ export function Register() {
     }
 
     if ((city && !state) || (!city && state)) {
-      setError("Para localizar no mapa, preencha tanto a Cidade quanto o Estado.");
+      setError(
+        "Para localizar no mapa, preencha tanto a Cidade quanto o Estado.",
+      );
       return;
     }
 
@@ -116,7 +132,9 @@ export function Register() {
 
       if (city && state && !bypassMap) {
         const query = encodeURIComponent(`${city}, ${state}`);
-        const mapRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
+        const mapRes = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${query}`,
+        );
         const mapData = await mapRes.json();
 
         if (mapData && mapData.length > 0) {
@@ -150,9 +168,10 @@ export function Register() {
       setSuccess(true);
       setIsLoading(false);
       setTimeout(() => navigate("/"), 2500);
-
     } catch (err) {
-      setError("Erro ao salvar. Verifique a sua conexão ou o servidor (json-server).");
+      setError(
+        "Erro ao salvar. Verifique a sua conexão ou o servidor (json-server).",
+      );
       setIsLoading(false);
     }
   };
@@ -164,10 +183,12 @@ export function Register() {
         {isEditMode ? "Editar Registo" : "Novo Registo de Espécie"}
       </h2>
 
-      <form onSubmit={(e) => handleSubmit(e, false)} className="flex flex-col gap-5">
-        
+      <form
+        onSubmit={(e) => handleSubmit(e, false)}
+        className="flex flex-col gap-5"
+      >
         {/* COMPONENTE DE ALERTAS EXTRAÍDO */}
-        <RegisterAlerts 
+        <RegisterAlerts
           error={error}
           success={success}
           isEditMode={isEditMode}
@@ -181,7 +202,9 @@ export function Register() {
         {/* INPUTS BÁSICOS */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nome da Espécie *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Nome da Espécie *
+            </label>
             <input
               placeholder="Ex: Onça Pintada"
               className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
@@ -191,7 +214,9 @@ export function Register() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Categoria *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Categoria *
+            </label>
             <select
               className="w-full p-3 border border-gray-300 rounded-xl bg-white focus:ring-2 focus:ring-green-500 outline-none"
               value={category}
@@ -209,18 +234,24 @@ export function Register() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Quantidade *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Quantidade *
+            </label>
             <input
               type="number"
               min="1"
               className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
               value={quantity}
-              onChange={(e) => setQuantity(e.target.value === "" ? "" : Number(e.target.value))}
+              onChange={(e) =>
+                setQuantity(e.target.value === "" ? "" : Number(e.target.value))
+              }
               disabled={success}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Link da Imagem</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Link da Imagem
+            </label>
             <input
               type="url"
               placeholder="https://site.com/foto.jpg"
@@ -233,7 +264,7 @@ export function Register() {
         </div>
 
         {/* COMPONENTE DE LOCALIZAÇÃO EXTRAÍDO */}
-        <LocationAutocomplete 
+        <LocationAutocomplete
           city={city}
           state={state}
           disabled={success}
@@ -246,7 +277,9 @@ export function Register() {
         />
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Descrição (Opcional)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Descrição (Opcional)
+          </label>
           <textarea
             placeholder="Observações..."
             className="w-full p-3 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-green-500"
@@ -261,10 +294,18 @@ export function Register() {
           type="submit"
           disabled={isLoading || success}
           className={`mt-4 py-4 rounded-xl font-bold text-lg shadow-lg transition-all ${
-            success ? "bg-green-500 text-white" : "bg-green-600 hover:bg-green-700 text-white"
+            success
+              ? "bg-green-500 text-white"
+              : "bg-green-600 hover:bg-green-700 text-white"
           } ${isLoading ? "opacity-50 cursor-wait" : ""}`}
         >
-          {isLoading ? "A processar..." : success ? "Finalizado!" : isEditMode ? "Confirmar Edição" : "Confirmar Cadastro"}
+          {isLoading
+            ? "A processar..."
+            : success
+              ? "Finalizado!"
+              : isEditMode
+                ? "Confirmar Edição"
+                : "Confirmar Cadastro"}
         </button>
       </form>
     </div>

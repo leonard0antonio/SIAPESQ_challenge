@@ -1,7 +1,7 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Header } from './components/Header';
-import { Home } from './pages/Home';
-import { Register } from './pages/Register';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Header } from "./pages/home/Components/Header";
+import { Home } from "./pages/home/Home";
+import { Register } from "./pages/register/Register";
 
 function App() {
   return (
@@ -9,7 +9,6 @@ function App() {
     <BrowserRouter>
       {/* O fundo cinza claro ajuda a dar contraste com os cards brancos da UI */}
       <div className="min-h-screen bg-gray-50">
-        
         {/* O Header aparece em todas as páginas */}
         <Header />
 
@@ -18,10 +17,10 @@ function App() {
           <Routes>
             {/* Rota principal: Listagem de Espécies */}
             <Route path="/" element={<Home />} />
-            
+
             {/* Rota de cadastro: Formulário */}
             <Route path="/register" element={<Register />} />
-            
+
             {/* Rota de edição: Reutiliza o mesmo formulário, mas com dados pré-carregados */}
             <Route path="/edit/:id" element={<Register />} />
           </Routes>

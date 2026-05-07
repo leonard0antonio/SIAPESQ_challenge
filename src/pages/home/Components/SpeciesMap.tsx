@@ -2,7 +2,7 @@ import { useState, useMemo, useRef, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import type { Species } from '../types/species';
+import type { Species } from '../../../types/species';
 
 // --- CONFIGURAÇÃO PREMIUM DOS ÍCONES LEAFLET ---
 // Resolve o bug dos ícones padrão que não aparecem no React/Vite

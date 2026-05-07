@@ -1,14 +1,14 @@
 import { useState, useMemo, useEffect } from "react";
-import type { Species } from "../types/species";
-import { api } from "../services/api";
+import type { Species } from "../../types/species";
+import { api } from "../../services/api";
 
 // Importação dos subcomponentes
-import { Dashboard } from "../components/Dashboard";
-import { SpeciesMap } from "../components/SpeciesMap";
-import { ConfirmDeleteModal } from "../components/ConfirmDeleteModal";
-import { ToastNotification } from "../components/ToastNotification";
-import { FilterBar } from "../components/FilterBar";
-import { SpeciesGrid } from "../components/SpeciesGrid";
+import { Dashboard } from "../home/Components/Dashboard";
+import { SpeciesMap } from "../home/Components/SpeciesMap";
+import { ConfirmDeleteModal } from "../home/Components/ConfirmDeleteModal";
+import { ToastNotification } from "../home/Components/ToastNotification";
+import { FilterBar } from "../home/Components/FilterBar";
+import { SpeciesGrid } from "../home/Components/SpeciesGrid";
 
 export function Home() {
   const [species, setSpecies] = useState<Species[]>([]);
