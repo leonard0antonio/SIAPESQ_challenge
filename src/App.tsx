@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion"; // Importe o AnimatePresence
+import { AnimatePresence } from "framer-motion"; 
 import { Header } from "./pages/home/Components/Header";
 import { Landing } from "./pages/Landing/Landing";
 import { Home } from "./pages/home/Home";
 import { Register } from "./pages/register/Register";
-import { PageTransition } from "./pages/Landing/Components/PageTransition"; // Importe o Wrapper
+import { PageTransition } from "./pages/Landing/Components/PageTransition"; 
 
 function AppContent() {
   const location = useLocation();
