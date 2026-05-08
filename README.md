@@ -12,7 +12,7 @@ A aplicação está disponível online, com o frontend hospedado na **Vercel** e
 
 > **⚠️ Avisos Importantes:**
 > 1. Como a API está hospedada num plano gratuito (Serverless/Free Tier), o servidor entra em modo de suspensão ("sleep") após um período de inatividade para poupar recursos. O primeiro acesso ao sistema pode demorar até 50 segundos para "acordar" o servidor ou até mesmo lançar um erro inicial. **Caso os dados não carreguem de imediato, aguarde alguns instantes e recarregue a página.** Assim que o servidor despertar, a navegação voltará a ser rápida e fluida.
-> 2. Devido a uma limitação técnica atual nas rotas (React Router DOM) em conjunto com o deploy no Vercel, **sempre que a página for recarregada (F5 / Reload) fora da rota principal, o sistema quebra, é necessario volatar pra pagina inicial (https://siapesq-challenge.vercel.app/) o para o início da aplicação.** Infelizmente, não foi possível corrigir esse comportamento até o momento.
+> 2. Devido a uma limitação técnica atual nas rotas (React Router DOM) em conjunto com o deploy no Vercel, **sempre que a página for recarregada (F5 / Reload) fora da rota principal, o sistema quebra, é necessario volatar pra pagina inicial (https://siapesq-challenge.vercel.app/) para o início da aplicação.** Infelizmente, não foi possível corrigir esse comportamento até o momento.
 
 ---
 
