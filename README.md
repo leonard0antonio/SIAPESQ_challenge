@@ -63,10 +63,10 @@ Abra o seu terminal e execute:
 
 ```bash
 # Clone este repositório
-git clone [https://github.com/leonard0antonio/SIAPESQ_challenge](https://github.com/leonard0antonio/SIAPESQ_challenge)
+git clone https://github.com/leonard0antonio/SIAPESQ_challenge
 
 # Entre na pasta do projeto
-cd siapesq
+cd SIAPESQ_challenge
 
 # Instale as dependências
 npm install
