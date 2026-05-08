@@ -167,7 +167,7 @@ const PIE_COLORS = [
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={stateData} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={3} dataKey="value" stroke="none">
-                    {stateData.map((entry, index) => (
+                    {stateData.map((_, index) => (
                       <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                     ))}
                   </Pie>

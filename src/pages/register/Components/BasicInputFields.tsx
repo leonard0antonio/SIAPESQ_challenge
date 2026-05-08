@@ -1,7 +1,5 @@
 // Componente de campos de entrada básicos, responsável por renderizar os campos de nome da espécie, categoria, quantidade e link da imagem. Ele recebe os valores e as funções de atualização como props, permitindo que o componente pai controle o estado dos campos. Os campos são projetados para serem acessíveis e responsivos, com validação básica para garantir que os dados inseridos sejam apropriados. O componente também inclui estilos para melhorar a usabilidade e a aparência visual dos campos de entrada.
 
-import React from "react";
-
 interface Props {
   name: string;
   setName: (val: string) => void;
