@@ -13,7 +13,6 @@ O **SIAPESQ** é uma aplicação web moderna projetada para auxiliar investigado
 - **Mapeamento Georreferenciado:** Mapa interativo com agrupamento inteligente de marcadores. Popups dinâmicos que listam múltiplas espécies registadas nas mesmas coordenadas.
 - **Registo Avançado:** - Integração com a API do **IBGE** para autocompletar Cidades e Estados.
   - Integração com **OpenStreetMap (Nominatim)** para conversão automática de endereço em coordenadas (Latitude/Longitude).
-  - Bloqueio ativo de preenchimento automático (autocomplete) invasivo do navegador.
 - **UI/UX Premium:** Design focado no utilizador com Glassmorphism, paleta de cores institucional (Emerald), feedback visual (Toasts) e transições de página (Page Transitions) usando Framer Motion.
 
 ---
@@ -44,7 +43,7 @@ Abra o seu terminal e execute:
 
 ```bash
 # Clone este repositório
-git clone [https://github.com/SEU_USUARIO/siapesq.git](https://github.com/SEU_USUARIO/siapesq.git)
+git clone [https://github.com/leonard0antonio/SIAPESQ_challenge](https://github.com/leonard0antonio/SIAPESQ_challenge)
 
 # Entre na pasta do projeto
 cd siapesq
@@ -80,7 +79,7 @@ A arquitetura do projeto foi pensada para ser escalável, dividindo responsabili
 
 ```text
 src/
- ├── components/           # Componentes globais e reutilizáveis (PageTransition, Mapas, Dashboard)
+ |
  ├── pages/
  │    ├── Landing/         # Tela de Apresentação Institucional
  │    ├── home/            # Catálogo Principal e Menu de Navegação
@@ -98,4 +97,3 @@ Desenvolvido com dedicação técnica e foco em código limpo por **Leonardo**.
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/leonardo-a-a063b519b/)
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/leonard0antonio)
-```
