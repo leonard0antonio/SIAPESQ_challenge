@@ -1,5 +1,3 @@
-//componente de header, responsável por exibir a barra de navegação no topo da página. Ele inclui o logo do sistema, links para as principais seções (Catálogo e Dashboard) e um botão de cadastro. O Header é projetado para ser responsivo e manter-se fixo no topo da página, proporcionando uma navegação fácil e rápida para os usuários enquanto exploram o conteúdo do sistema.
-
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export function Header() {
@@ -26,19 +24,24 @@ export function Header() {
     <>
       {/* Efeito de Vidro Fosco (backdrop-blur) */}
       <header className="bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm sticky top-0 z-50 transition-all">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        
+        {/* Adicionados breakpoints sm: para controlar os espaçamentos */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
 
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-600/20 group-hover:bg-emerald-500 transition-colors">
-              <span className="text-white font-black text-lg">S</span>
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 group shrink-0">
+            {/* Ícone reduz proporcionalmente no mobile */}
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-600/20 group-hover:bg-emerald-500 transition-colors">
+              <span className="text-white font-black text-base sm:text-lg">S</span>
             </div>
 
-            <span className="text-xl font-black text-gray-900 tracking-widest group-hover:text-emerald-600 transition-colors">
+            {/* Texto oculta-se no mobile para libertar espaço */}
+            <span className="hidden sm:block text-lg sm:text-xl font-black text-gray-900 tracking-widest group-hover:text-emerald-600 transition-colors">
               SIAPESQ
             </span>
           </Link>
 
-          <nav className="flex items-center gap-8 font-medium text-sm text-gray-600">
+          {/* Menus e Gaps ajustam o tamanho automaticamente */}
+          <nav className="flex items-center gap-3 sm:gap-8 font-medium text-xs sm:text-sm text-gray-600">
 
             <Link
               to="/catalogo"
@@ -63,12 +66,13 @@ export function Header() {
               Dashboard
             </a>
 
+            {/* Botão diminui os paddings e margens em telas pequenas */}
             <Link
               to="/register"
-              className="ml-4 px-6 py-2.5 bg-gray-900 text-white font-medium rounded-lg hover:bg-emerald-600 shadow-md hover:shadow-emerald-600/30 transition-all active:scale-95 flex items-center gap-2"
+              className="ml-1 sm:ml-4 px-3 py-2 sm:px-6 sm:py-2.5 bg-gray-900 text-white font-medium rounded-lg hover:bg-emerald-600 shadow-md hover:shadow-emerald-600/30 transition-all active:scale-95 flex items-center gap-1 sm:gap-2"
             >
               <svg
-                className="w-4 h-4"
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -81,7 +85,8 @@ export function Header() {
                 />
               </svg>
 
-              Cadastrar
+              {/* Min-width query customizado para não quebrar a palavra em telemóveis antigos */}
+              <span className="hidden min-[380px]:block">Cadastrar</span>
             </Link>
 
           </nav>

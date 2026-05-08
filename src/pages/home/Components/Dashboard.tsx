@@ -76,8 +76,35 @@ export function Dashboard({ species }: Props) {
     return Object.entries(counts).map(([name, value]) => ({ name, value }));
   }, [species]);
 
-  // ✨ PALETA PREMIUM EMERALD
-  const PIE_COLORS = ['#059669', '#10b981', '#34d399', '#0f766e', '#14b8a6', '#64748b'];
+
+const PIE_COLORS = [
+  "#ef4444", // vermelho
+  "#f97316", // laranja
+  "#f59e0b", // âmbar
+  "#eab308", // amarelo
+  "#84cc16", // lima
+  "#22c55e", // verde
+  "#10b981", // emerald
+  "#14b8a6", // teal
+  "#06b6d4", // cyan
+  "#0ea5e9", // sky
+  "#3b82f6", // azul
+  "#6366f1", // índigo
+  "#8b5cf6", // violeta
+  "#a855f7", // roxo
+  "#d946ef", // fuchsia
+  "#ec4899", // pink
+  "#f43f5e", // rose
+  "#78716c", // stone
+  "#6b7280", // gray
+  "#64748b", // slate
+  "#0f766e", // teal escuro
+  "#1d4ed8", // azul forte
+  "#7c3aed", // violeta forte
+  "#15803d", // verde forte
+  "#b45309", // âmbar escuro
+  "#be123c", // rose escuro
+];
 
   if (species.length === 0) return null;
 
