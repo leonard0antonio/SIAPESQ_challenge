@@ -1,4 +1,6 @@
-import { useState, useEffect, FormEvent } from "react";
+// Página de registro de espécies, responsável por fornecer um formulário para criar ou editar registros de espécies. A Register é uma interface intuitiva que permite aos usuários inserir informações detalhadas sobre a espécie, incluindo nome, categoria, descrição, imagem e localização. Ela também integra funcionalidades de autocomplete para cidades e estados, utilizando dados do IBGE, e validação para garantir que as informações sejam completas e precisas. A Register é essencial para a criação e manutenção do catálogo de espécies no aplicativo.
+
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../services/api";
 
@@ -12,6 +14,18 @@ import { SubmitButton } from "../../pages/register/Components/SubmitButton";
 interface IBGELocation {
   city: string;
   state: string;
+}
+
+//  FIX 2: Criar tipagem para a resposta da API do IBGE
+interface IBGEMunicipio {
+  nome: string;
+  microrregiao?: {
+    mesorregiao?: {
+      UF?: {
+        sigla?: string;
+      };
+    };
+  };
 }
 
 export function Register() {
@@ -30,7 +44,9 @@ export function Register() {
 
   // Estados de Localização (IBGE)
   const [allLocations, setAllLocations] = useState<IBGELocation[]>([]);
-  const [filteredLocations, setFilteredLocations] = useState<IBGELocation[]>([]);
+  const [filteredLocations, setFilteredLocations] = useState<IBGELocation[]>(
+    [],
+  );
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   // Estados de Controlo Visual
@@ -42,7 +58,8 @@ export function Register() {
   // Carrega dados se for Edição
   useEffect(() => {
     if (isEditMode) {
-      api.get(`/species/${id}`)
+      api
+        .get(`/species/${id}`)
         .then((response) => {
           const animal = response.data;
           setName(animal.name);
@@ -61,8 +78,9 @@ export function Register() {
   useEffect(() => {
     fetch("https://servicodados.ibge.gov.br/api/v1/localidades/municipios")
       .then((res) => res.json())
-      .then((data) => {
-        const formatted = data.map((m: any) => ({
+      .then((data: IBGEMunicipio[]) => {
+        // ✨ Aplicamos a tipagem aqui em vez do 'any'
+        const formatted = data.map((m) => ({
           city: m.nome,
           state: m.microrregiao?.mesorregiao?.UF?.sigla || "DF",
         }));
@@ -71,16 +89,24 @@ export function Register() {
       .catch(() => console.error("Erro ao carregar cidades."));
   }, []);
 
+  // Lógica de Autocomplete para Cidade/Estado
   const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setCity(val);
     setLocationNotFound(false);
 
     if (val.length > 1) {
-      const textToSearch = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const textToSearch = val
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
       const filtered = allLocations
         .filter((l) =>
-          l.city.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(textToSearch)
+          l.city
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .includes(textToSearch),
         )
         .slice(0, 6);
 
@@ -91,6 +117,7 @@ export function Register() {
     }
   };
 
+  // Lógica para selecionar uma sugestão de localização
   const handleSelectLocation = (loc: IBGELocation) => {
     setCity(loc.city);
     setState(loc.state);
@@ -98,8 +125,12 @@ export function Register() {
     setError("");
   };
 
-  const handleSubmit = async (e: FormEvent | null, bypassMap = false) => {
-    if (e) e.preventDefault();
+  // Lógica de Submissão do Formulário, incluindo a consulta ao Nominatim para obter coordenadas geográficas
+  const handleSubmit = async (
+    e?: React.SyntheticEvent | null,
+    bypassMap = false,
+  ) => {
+    if (e && e.preventDefault) e.preventDefault();
     setError("");
     setSuccess(false);
 
@@ -109,7 +140,9 @@ export function Register() {
     }
 
     if ((city && !state) || (!city && state)) {
-      setError("Para localizar no mapa, preencha tanto a Cidade quanto o Estado.");
+      setError(
+        "Para localizar no mapa, preencha tanto a Cidade quanto o Estado.",
+      );
       return;
     }
 
@@ -121,7 +154,9 @@ export function Register() {
 
       if (city && state && !bypassMap) {
         const query = encodeURIComponent(`${city}, ${state}`);
-        const mapRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
+        const mapRes = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${query}`,
+        );
         const mapData = await mapRes.json();
 
         if (mapData && mapData.length > 0) {
@@ -134,6 +169,7 @@ export function Register() {
         }
       }
 
+      // Prepara o payload para envio, garantindo que os campos de texto sejam limpos e as coordenadas sejam incluídas se disponíveis
       const payload = {
         name: name.trim(),
         category,
@@ -155,8 +191,11 @@ export function Register() {
       setSuccess(true);
       setIsLoading(false);
       setTimeout(() => navigate("/catalogo"), 2500);
-    } catch (err) {
-      setError("Erro ao salvar. Verifique a sua conexão ou o servidor (json-server).");
+    } catch {
+      //  FIX 3: Remoção do (err) já que não estava a ser usado
+      setError(
+        "Erro ao salvar. Verifique a sua conexão ou o servidor (json-server).",
+      );
       setIsLoading(false);
     }
   };
@@ -164,7 +203,8 @@ export function Register() {
   return (
     <div className="max-w-xl mx-auto p-8 bg-white rounded-2xl shadow-xl mt-10 mb-20 border border-gray-100 relative">
       <h2 className="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2">
-        <span className="bg-green-600 w-2 h-8 rounded-full"></span>
+        <span className="bg-emerald-600 w-2 h-8 rounded-full"></span>{" "}
+        {/* Combinando com o tema Emerald! */}
         {isEditMode ? "Editar Registo" : "Novo Registo de Espécie"}
       </h2>
 

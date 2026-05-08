@@ -1,8 +1,12 @@
+// Componente de autocompletar de localização, responsável por permitir que os usuários busquem e selecionem cidades do Brasil utilizando dados do IBGE ou insiram manualmente a cidade e o estado. Ele recebe os valores da cidade e do estado, funções para atualizar esses valores, um indicador de desabilitação, uma lista de locais filtrados e funções para lidar com mudanças e seleções. O componente é projetado para ser acessível e responsivo, com um dropdown de sugestões que aparece quando o usuário digita na cidade, facilitando a seleção de localidades válidas.
+
+// Interface para representar a estrutura de um local do IBGE, contendo o nome da cidade e o estado correspondente
 interface IBGELocation {
   city: string;
   state: string;
 }
 
+// Interface de props para o componente LocationAutocomplete, definindo os tipos esperados para os valores da cidade e estado, funções de atualização, indicador de desabilitação, lista de locais filtrados e funções de manipulação de eventos
 interface Props {
   city: string;
   state: string;
