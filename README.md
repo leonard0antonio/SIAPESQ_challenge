@@ -6,6 +6,16 @@ O **SIAPESQ** é uma aplicação web moderna projetada para auxiliar investigado
 
 ---
 
+## 🌐 Deploy e Status do Servidor
+
+A aplicação está disponível online, com o frontend hospedado na **Vercel** e o backend hospedado no **Render.com**.
+
+> **⚠️ Aviso Importante:** Como a API está hospedada num plano gratuito (Serverless/Free Tier), o servidor entra em modo de suspensão ("sleep") após um período de inatividade para poupar recursos. 
+> 
+> O primeiro acesso ao sistema pode demorar até 50 segundos para "acordar" o servidor ou até mesmo lançar um erro inicial. **Caso os dados não carreguem de imediato, aguarde alguns instantes e recarregue a página.** Assim que o servidor despertar, a navegação voltará a ser rápida e fluida.
+
+---
+
 ## ✨ Principais Funcionalidades
 
 - **Catálogo Inteligente:** Listagem de espécies com sistema de busca tolerante a acentos e filtros por categoria.
@@ -52,7 +62,22 @@ cd siapesq
 npm install
 ```
 
-### Passo 2: Iniciar o Banco de Dados (API Mock)
+### Passo 2: Alterar a API para Ambiente Local
+
+Como o código está configurado para o ambiente de produção, é necessário apontar o Axios para o seu servidor local.
+
+Abra o ficheiro **`src/services/api.ts`** e altere a `baseURL`:
+
+```typescript
+import axios from 'axios';
+
+export const api = axios.create({
+  // baseURL: '[https://siapesq-api.onrender.com](https://siapesq-api.onrender.com)', <-- Comente ou apague a URL de produção
+  baseURL: 'http://localhost:3000', // <-- Adicione a URL local
+});
+```
+
+### Passo 3: Iniciar o Banco de Dados (API Mock)
 
 Abra um terminal na pasta raiz do projeto e inicie o JSON-Server. Ele vai monitorar o ficheiro `db.json` e criar as rotas da API na porta 3000.
 
@@ -61,7 +86,7 @@ npx json-server --watch db.json --port 3000
 ```
 *(Certifique-se de que o terminal indica que o servidor está a rodar em `http://localhost:3000`)*
 
-### Passo 3: Iniciar o Frontend (Vite)
+### Passo 4: Iniciar o Frontend (Vite)
 
 Abra um **novo terminal** (mantendo o do JSON-Server aberto) na mesma pasta do projeto e inicie a aplicação React:
 
